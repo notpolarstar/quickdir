@@ -4,7 +4,7 @@ use std::fs::write;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
 use ratatui::layout::Constraint;
 use ratatui::layout::Layout;
-use ratatui::{buffer::Buffer, layout::Rect, style::Stylize, symbols::border, text::{Line, Text}, widgets::{Block, Paragraph, Widget}, DefaultTerminal, Frame};
+use ratatui::{widgets::{Paragraph}, DefaultTerminal, Frame};
 
 pub mod dir_list;
 
@@ -14,29 +14,6 @@ pub struct App {
     dir_div_prev: dir_list::DirList,
     dir_div_next: dir_list::DirList,
     exit: bool,
-}
-
-impl Widget for &App {
-    fn render(self, area: Rect, buf: &mut Buffer) {
-        let title = Line::from("QuickDir".bold());
-        let instructions = Line::from(vec![
-            "SAUCISSE".into(),
-        ]);
-
-        let block = Block::bordered()
-            .title(title.centered())
-            .title_bottom(instructions.centered())
-            .border_set(border::THICK);
-
-        let count_tx = Text::from(vec![Line::from(vec![
-            "pos ".into(),
-        ])]);
-
-        Paragraph::new(count_tx)
-            .centered()
-            .block(block)
-            .render(area, buf);
-    }
 }
 
 impl App {

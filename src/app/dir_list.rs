@@ -20,17 +20,6 @@ impl Widget for &DirList {
             .title(title.centered())
             .border_set(border::PLAIN);
 
-        // let files_lines: Vec<Line> = match &self.files {
-        //     Some(files) => files.iter().enumerate().map(|(i, file)| {
-        //         if self.has_highlight && i == self.cursor_pos {
-        //             Line::from(file.as_str().reversed())
-        //         } else {
-        //             Line::from(file.as_str())
-        //         }
-        //     }).collect(),
-        //     None => vec![Line::from("Failed to read directory")],
-        // };
-
         let window_size = area.height as usize - 2;
         let start = if self.cursor_pos >= window_size / 2 {
             self.cursor_pos - window_size / 2
