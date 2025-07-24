@@ -5,6 +5,7 @@ use std::path::Path;
 #[derive(Debug, Default)]
 pub struct DirList {
     pub has_highlight: bool,
+    pub show_hidden: bool,
     cursor_pos: usize,
     pub parent_dir: String,
     pub curr_dir: String,
@@ -37,6 +38,8 @@ impl Widget for &DirList {
                         let idx = i + start;
                         if self.has_highlight && idx == self.cursor_pos + start {
                             Line::from(file.as_str().reversed())
+                        } else if file.starts_with(".") {
+                            Line::from(file.as_str().dark_gray())
                         } else {
                             Line::from(file.as_str())
                         }
@@ -72,11 +75,12 @@ impl DirList {
         self.curr_dir = path.to_string();
         match fs::read_dir(Path::new(path)) {
             Ok(read_dir) => {
-                let files_vec: Vec<String> = read_dir
+                let mut files_vec: Vec<String> = read_dir
                     .filter_map(|entry| entry.ok())
                     .filter(|e| e.metadata().ok().map(|m| m.is_dir()).unwrap_or(false))
                     .filter_map(|e| e.file_name().into_string().ok())
                     .collect();
+                files_vec.sort();
                 self.dir_entries_len = files_vec.len();
                 self.files = Some(files_vec);
             }
